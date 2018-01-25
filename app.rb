@@ -15,13 +15,14 @@ post "/github/webhook" do
   $webhooks << request_body
   data = JSON.parse(request_body)
   if data["action"] == "created"
-    comment_body = data["comment"]["body"]
+    comment = data["comment"]
+    comment_body = comment["body"]
     if comment_body.start_with?("simon says")
       repo = data["repository"]["full_name"]
       pr_branch = data["pull_request"]["head"]
       parent_branch_name = pr_branch["ref"] # does _not_ have `heads/`
       parent_sha = pr_branch["sha"]
-      command = Command.new(comment_body)
+      command = Command.new(comment)
       client = Client.new(repo: repo)
       client.dispatch(command, parent_branch_name, parent_sha)
     end
