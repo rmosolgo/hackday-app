@@ -5,7 +5,7 @@
 - Delete-a-line:
   - Make a comment to delete a line
   - The app opens a PR to remove that line
-- apply some real language tooling:
+- Apply some real language tooling:
   - Rename local
   - Replace literal values
 
