@@ -63,7 +63,7 @@ class Command
           raise "Not implemented type: #{@type}"
         end
 
-        log("Rebuilt by #{type}: #{rebuilt_entry}")
+        log("Rebuilt by #{@type}: #{rebuilt_entry}")
 
         rebuilt_entry
       else
