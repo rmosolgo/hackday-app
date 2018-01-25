@@ -12,7 +12,7 @@ class Command
     # original start, original lines, new start, new lines
     match = comment_hunk.match(/@@ -(?<os>\d+),(?<ol>\d+) \+(?<ns>\d+),?(?<nl>\d+)? @@/)
     log("match: #{match}")
-    @line = match[:os].to_i + position
+    @line = match[:ns].to_i + (position - 1)
     @file = comment["path"]
     log("commented on: #{@line} of #{@file}")
 
@@ -39,7 +39,7 @@ class Command
     new_tree = tree.map do |entry|
       if entry["path"] == @file
         file_content = client.get_blob_content(entry["sha"])
-
+        suffix = file_content.end_with?("\n") ? "\n" : ""
         new_entry = {
           "path" => entry["path"],
           "mode" => entry["mode"],
@@ -53,13 +53,13 @@ class Command
           lines = file_content.split("\n")
           line_idx = @line - 1
           lines.delete_at(line_idx)
-          new_entry["content"] = lines.join("\n") + "\n"
+          new_entry["content"] = lines.join("\n") + suffix
           new_entry
         when :insert_line
           lines = file_content.split("\n")
           line_idx = @line
           lines.insert(line_idx, "")
-          new_entry["content"] = lines.join("\n") + "\n"
+          new_entry["content"] = lines.join("\n") + suffix
           new_entry
         else
           raise "Not implemented type: #{@type}"
