@@ -2,6 +2,7 @@ require "sinatra"
 require "json"
 require "sinatra/reloader" if development?
 require "./client"
+require "./command"
 
 $webhooks = []
 
@@ -14,12 +15,16 @@ post "/github/webhook" do
   $webhooks << request_body
   data = JSON.parse(request_body)
   if data["action"] == "created"
-    repo = data["repository"]["full_name"]
-    pr_branch = data["pull_request"]["head"]
-    parent_branch_name = pr_branch["ref"] # does _not_ have `heads/`
-    parent_sha = pr_branch["sha"]
-    client = Client.new(repo: repo)
-    client.add_file(parent_branch_name, parent_sha)
+    comment_body = data["comment"]["body"]
+    if comment_body.start_with?("simon says")
+      repo = data["repository"]["full_name"]
+      pr_branch = data["pull_request"]["head"]
+      parent_branch_name = pr_branch["ref"] # does _not_ have `heads/`
+      parent_sha = pr_branch["sha"]
+      command = Command.new(comment_body)
+      client = Client.new(repo: repo)
+      client.dispatch(command, parent_branch_name, parent_sha)
+    end
   end
   "OK"
 end

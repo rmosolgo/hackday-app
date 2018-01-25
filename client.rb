@@ -1,6 +1,7 @@
 require "net/http"
 require "json"
 require "jwt"
+require "base64"
 
 class Client
   attr_reader :repo, :jwt, :installation_token
@@ -9,6 +10,17 @@ class Client
     @repo = repo
     @jwt = get_jwt
     @installation_token = get_installation_token
+  end
+
+  def dispatch(command, parent_branch, parent_sha)
+    parent_tree = get_tree(parent_sha)
+
+    new_tree = command.perform(parent_tree, self)
+    command_message = command.message
+
+    created_tree = create_tree(parent_sha, new_tree)
+    created_commit = create_commit(command_message, created_tree["sha"], parent_sha)
+    update_branch(parent_branch, created_commit["sha"])
   end
 
   def add_file(parent_branch, parent_sha)
@@ -21,9 +33,12 @@ class Client
         content: "puts 'Hello World'"
       }
     ]
-    created_tree = create_tree(parent_sha, new_tree)
-    created_commit = create_commit("Add file by API", created_tree["sha"], parent_sha)
-    update_branch(parent_branch, created_commit["sha"])
+
+  end
+
+  def get_blob_content(blob_sha)
+    blob_json = api_request(:get, "repos/#{@repo}/git/blobs/#{blob_sha}")
+    Base64.decode64(blob_json["content"])
   end
 
   def get_tree(parent_sha)
