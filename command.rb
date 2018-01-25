@@ -32,6 +32,7 @@ class Command
     else
       raise "Unknown command text: #{command_text}"
     end
+    log("Message: #{@message}")
   end
 
   # Returns a new tree
@@ -51,7 +52,7 @@ class Command
         when :delete_line
           lines = file_content.split("\n")
           line_idx = @line - 1
-          lines.delete(line_idx)
+          lines.delete_at(line_idx)
           new_entry["content"] = lines.join("\n")
           new_entry
         when :insert_line
