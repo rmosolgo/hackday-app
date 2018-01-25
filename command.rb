@@ -3,12 +3,16 @@ class Command
   attr_reader :message
 
   def initialize(comment)
+    log("comment keys: #{comment.keys}")
     @body = comment["body"]
     comment_hunk = comment["diff_hunk"]
+    log("hunk: #{comment_hunk}")
     # Position _in_ the hunk:
     position = comment["position"]
     # original start, original lines, new start, new lines
     match = comment_hunk.match(/@@ -(?<os>\d+),(?<ol>\d+) \+(?<ns>\d+),(?<nl>\d+) @@/)
+    log("match: #{match}")
+
     # "position" is 1-indexed, so subtract the one
     @line = match[:os].to_i + (position - 1)
     @file = comment["path"]
@@ -64,5 +68,11 @@ class Command
     end
     # Remove deleted
     new_tree.compact
+  end
+
+  private
+
+  def log(msg)
+    puts "[CLIENT] #{msg}"
   end
 end
