@@ -63,6 +63,8 @@ class Command
         rebuilt_entry = case @type
         when :sub
           lines[line_idx] = lines[line_idx].gsub(@sub_find, @sub_replace)
+          new_entry["content"] = lines.join("\n") + suffix
+          new_entry
         when :remove_file
           nil
         when :delete_line
