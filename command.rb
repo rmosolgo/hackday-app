@@ -19,6 +19,18 @@ class Command
     first_line = @body.split("\n").first
     command_text = first_line.sub(/^simon says /, "")
     case command_text
+    when /capitalize /
+      _cap, term = command_text.split(" ")
+      @sub_find = term
+      @sub_replace = term.capitalize
+      @type = :sub
+      @message = "Capitalize \"#{@sub_replace}\" on line #{@line} of #{@file}"
+    when /sub /
+      _sub, from, to = command_text.split(" ")
+      @sub_find = from
+      @sub_replace = to
+      @type = :sub
+      @message "Replace \"#{@sub_find}\" with \"#{@sub_replace}\" in line #{@line} of #{@file}"
     when /remove file/
       @message = "Remove #{@file}"
       @type = :remove_file
@@ -39,6 +51,8 @@ class Command
     new_tree = tree.map do |entry|
       if entry["path"] == @file
         file_content = client.get_blob_content(entry["sha"])
+        lines = file_content.split("\n")
+        line_idx = @line - 1
         suffix = file_content.end_with?("\n") ? "\n" : ""
         new_entry = {
           "path" => entry["path"],
@@ -47,18 +61,16 @@ class Command
         }
 
         rebuilt_entry = case @type
+        when :sub
+          lines[line_idx] = lines[line_idx].gsub(@sub_find, @sub_replace)
         when :remove_file
           nil
         when :delete_line
-          lines = file_content.split("\n")
-          line_idx = @line - 1
           lines.delete_at(line_idx)
           new_entry["content"] = lines.join("\n") + suffix
           new_entry
         when :insert_line
-          lines = file_content.split("\n")
-          line_idx = @line
-          lines.insert(line_idx, "")
+          lines.insert(line_idx + 1, "")
           new_entry["content"] = lines.join("\n") + suffix
           new_entry
         else
