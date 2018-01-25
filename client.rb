@@ -68,7 +68,16 @@ class Client
     })
   end
 
-  REQ_CLASS = { get: Net::HTTP::Get, post: Net::HTTP::Post, patch: Net::HTTP::Patch }
+  def delete_comment(comment_id)
+    api_request(:delete, "repos/#{@repo}/pulls/comments/#{comment_id}")
+  end
+
+  REQ_CLASS = {
+    get: Net::HTTP::Get,
+    post: Net::HTTP::Post,
+    patch: Net::HTTP::Patch,
+    delete: Net::HTTP::Delete,
+  }
 
   # @return Hash<String => Object>
   def api_request(method, path, jwt: nil, **params)

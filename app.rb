@@ -25,6 +25,7 @@ post "/github/webhook" do
       command = Command.new(comment)
       client = Client.new(repo: repo)
       client.dispatch(command, parent_branch_name, parent_sha)
+      client.delete_comment(comment["id"])
     end
   end
   "OK"
