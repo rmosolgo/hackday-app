@@ -114,7 +114,8 @@ class Client
       raise "HTTP failure: #{response.code}, #{response.body}"
     end
 
-    JSON.parse(response.body)
+    # `nil` in case of DELETE
+    response.body && JSON.parse(response.body)
   end
 
   private
