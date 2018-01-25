@@ -45,7 +45,7 @@ class Command
           "type" => entry["type"],
         }
 
-        case @type
+        rebuilt_entry = case @type
         when :remove_file
           nil
         when :delete_line
@@ -62,12 +62,18 @@ class Command
         else
           raise "Not implemented type: #{@type}"
         end
+
+        log("Rebuilt by #{type}: #{rebuilt_entry}")
+
+        rebuilt_entry
       else
         entry
       end
     end
     # Remove deleted
-    new_tree.compact
+    t = new_tree.compact
+    log("New tree: #{t}")
+    t
   end
 
   private
