@@ -130,7 +130,7 @@ class Client
     end
   end
 
-  def log(str)
+  def http_log(str)
     puts "[HTTP] #{str}"
   end
 end
