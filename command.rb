@@ -30,7 +30,7 @@ class Command
       @sub_find = from
       @sub_replace = to
       @type = :sub
-      @message "Replace \"#{@sub_find}\" with \"#{@sub_replace}\" in line #{@line} of #{@file}"
+      @message = "Replace \"#{@sub_find}\" with \"#{@sub_replace}\" in line #{@line} of #{@file}"
     when /remove file/
       @message = "Remove #{@file}"
       @type = :remove_file
