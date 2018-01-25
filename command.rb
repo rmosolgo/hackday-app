@@ -51,13 +51,13 @@ class Command
           nil
         when :delete_line
           lines = file_content.split("\n")
-          line_idx = @line - 1
+          line_idx = @line
           lines.delete_at(line_idx)
           new_entry["content"] = lines.join("\n") + "\n"
           new_entry
         when :insert_line
           lines = file_content.split("\n")
-          line_idx = @line - 1
+          line_idx = @line
           lines.insert(line_idx, "")
           new_entry["content"] = lines.join("\n") + "\n"
           new_entry
