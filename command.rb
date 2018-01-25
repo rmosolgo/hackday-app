@@ -25,7 +25,7 @@ class Command
       @sub_replace = term.capitalize
       @type = :sub
       @message = "Capitalize \"#{@sub_replace}\" on line #{@line} of #{@file}"
-    when /sub /
+    when /replace /
       _sub, from, to = command_text.split(" ")
       @sub_find = from
       @sub_replace = to
