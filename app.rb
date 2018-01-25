@@ -9,6 +9,6 @@ get "/" do
 end
 
 post "/github/webhook" do
-  $webhooks << request.body
+  $webhooks << request.body.read
   "OK"
 end
