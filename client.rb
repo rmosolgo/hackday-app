@@ -14,8 +14,9 @@ class Client
 
   def dispatch(command, parent_branch, parent_sha)
     parent_tree = get_tree(parent_sha)
-
-    new_tree = command.perform(parent_tree, self)
+    # TODO this ignores truncated and nested files
+    prev_tree = parent_tree["tree"]
+    new_tree = command.perform(prev_tree, self)
     command_message = command.message
 
     created_tree = create_tree(parent_sha, new_tree)
