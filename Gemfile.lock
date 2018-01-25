@@ -4,6 +4,7 @@ GEM
     backports (3.11.0)
     daemons (1.2.4)
     eventmachine (1.2.5)
+    jwt (2.1.0)
     multi_json (1.13.1)
     mustermann (1.0.1)
     rack (2.0.3)
@@ -31,6 +32,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  jwt (~> 2.1)
   sinatra
   sinatra-contrib (~> 2.0)
   thin
