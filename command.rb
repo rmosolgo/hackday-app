@@ -16,6 +16,7 @@ class Command
     # "position" is 1-indexed, so subtract the one
     @line = match[:os].to_i + (position - 1)
     @file = comment["path"]
+    log("commented on: #{@line} of #{@file}")
 
     first_line = @body.split("\n").first
     command_text = first_line.sub(/^simon says /, "")

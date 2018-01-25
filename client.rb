@@ -93,7 +93,7 @@ class Client
       req["Authorization"] = "Bearer #{@installation_token}"
     end
 
-    http_log "headers: #{req.to_hash}"
+    # http_log "headers: #{req.to_hash}"
     response = Net::HTTP.start(uri.host, uri.port, {use_ssl: true}) do |http|
       http_log "begin request"
       http.request(req)
