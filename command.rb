@@ -10,14 +10,14 @@ class Command
     # Position _in_ the hunk:
     position = comment["position"]
     # original start, original lines, new start, new lines
-    match = comment_hunk.match(/@@ -(?<os>\d+),(?<ol>\d+) \+(?<ns>\d+),(?<nl>\d+) @@/)
+    match = comment_hunk.match(/@@ -(?<os>\d+),(?<ol>\d+) \+(?<ns>\d+),?(?<nl>\d+)? @@/)
     log("match: #{match}")
 
     # "position" is 1-indexed, so subtract the one
     @line = match[:os].to_i + (position - 1)
     @file = comment["path"]
 
-    first_line = comment_body.split("\n").first
+    first_line = @body.split("\n").first
     command_text = first_line.sub(/^simon says /, "")
     case command_text
     when /remove file/
