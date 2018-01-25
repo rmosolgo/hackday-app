@@ -59,6 +59,7 @@ class Command
           line_idx = @line - 1
           lines.insert(line_idx, "")
           new_entry["content"] = lines.join("\n")
+          new_entry
         else
           raise "Not implemented type: #{@type}"
         end
