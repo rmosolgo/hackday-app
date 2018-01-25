@@ -94,7 +94,7 @@ class Client
 
   private
 
-  PRIVATE_PEM = ENV["PRIVATE_KEY"] || File.read("./hackday-app.2018-01-25.private-key.pem")
+  PRIVATE_PEM = ENV["PRIVATE_PEM"] || File.read("./hackday-app.2018-01-25.private-key.pem")
   PRIVATE_KEY = OpenSSL::PKey::RSA.new(PRIVATE_PEM)
 
   def get_jwt
